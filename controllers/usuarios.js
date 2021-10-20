@@ -4,13 +4,22 @@ const Usuario = require("../models/usuario");
 const { generarJwt } = require("../helpers/jwt");
 
 const getUsuarios = async (req, res) => {
-  const usuarios = await Usuario.find();
+  const desde = Number(req.query.desde) || 0;
+  const [usuarios, total] = await Promise.all([
+    Usuario.find({}, "nombre email role google img").skip(desde).limit(5),
+    Usuario.countDocuments(),
+  ]);
   res.json({
     ok: true,
     usuarios,
-    uid: req.uid,
+    total,
   });
 };
+
+// var serveIndex = require('serve-index');
+// app.use(express.static(__dirname + '/'))
+// app.use('/uploads', serveIndex(__dirname + '/uploads'));
+
 const crearUsuario = async (req, res = response) => {
   const { email, password } = req.body;
 
