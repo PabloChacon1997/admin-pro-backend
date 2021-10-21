@@ -27,7 +27,15 @@ router.post(
   crearHospital
 );
 
-router.put("/:id", [], actualizarHospital);
+router.put(
+  "/:id",
+  [
+    validarJwt,
+    body("nombre", "EL nombre del hospital es necesario").not().isEmpty(),
+    validarCampos,
+  ],
+  actualizarHospital
+);
 
-router.delete("/:id", eliminarHospital);
+router.delete("/:id", validarJwt, eliminarHospital);
 module.exports = router;
