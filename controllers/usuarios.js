@@ -29,7 +29,7 @@ const crearUsuario = async (req, res = response) => {
     if (existeEmail) {
       return res.status(400).json({
         ok: false,
-        msg: "El correo ya existe, por favor ingrese uno nuevo!!",
+        msg: "El correo ya existe, por favor ingrese uno nuevo.",
       });
     }
 
@@ -83,7 +83,9 @@ const actualizarUsuario = async (req, res = response) => {
     }
 
     // Actualizaciones
-    campos.email = email;
+    if (!usuarioDB.google) {
+      campos.email = email;
+    }
 
     const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, {
       new: true,
